@@ -1,0 +1,53 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="de.j4rvis.bleadmin.XmlActivity">
+
+    <ScrollView
+        android:id="@+id/xml_content_sv"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scrollbars="vertical"
+        android:fillViewport="true"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/xml_content"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:autoText="false" />
+
+    </ScrollView>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Upload to server"
+            android:id="@+id/button_upload_xml"
+            android:layout_below="@+id/xml_content"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/upload_status"
+            android:layout_gravity="right"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="16dp" />
+    </LinearLayout>
+
+</LinearLayout>
+<!-- From: file:/home/micha/dev/projects/android-uri-beacon-scanner/app/src/main/res/layout/activity_xml.xml -->

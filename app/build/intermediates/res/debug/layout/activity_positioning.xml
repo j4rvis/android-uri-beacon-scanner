@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:weightSum="1">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Map current position"
+        android:id="@+id/map_btn"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start positioning"
+        android:id="@+id/start_btn"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stop positioning"
+        android:id="@+id/stop_btn"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/mapname_et"
+        android:layout_gravity="right"
+        android:text="Desk"/>
+    <TextView
+        android:layout_width="231dp"
+        android:layout_height="wrap_content"
+        android:text="No position detected yet"
+        android:lines="10"
+        android:id="@+id/current_position_tv"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.43"/>
+</LinearLayout>
+
+<!-- From: file:/home/micha/dev/projects/android-uri-beacon-scanner/app/src/main/res/layout/activity_positioning.xml -->

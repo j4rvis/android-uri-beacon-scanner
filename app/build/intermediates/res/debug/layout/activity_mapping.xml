@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No position detected yet"
+        android:textSize="24sp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:id="@+id/current_position_tv"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/map_name_et"
+        android:text="Beacon-Name"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/map_category_et"
+        android:text="Kategorie"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:inputType="number"
+            android:layout_height="wrap_content"
+            android:hint="X-Koordinate"
+            android:id="@+id/map_position_x_et"/>
+
+        <EditText
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:inputType="number"
+            android:layout_height="wrap_content"
+            android:hint="Y-Koordinate"
+            android:id="@+id/map_position_y_et" />
+    </LinearLayout>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Map current position"
+        android:id="@+id/map_btn"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Clear files"
+            android:id="@+id/clear_files_btn"/>
+        <Button
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Remove Last Position"
+            android:id="@+id/remove_last_btn"/>
+    </LinearLayout>
+</LinearLayout>
+
+<!-- From: file:/home/micha/dev/projects/android-uri-beacon-scanner/app/src/main/res/layout/activity_mapping.xml -->

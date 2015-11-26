@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="de.j4rvis.bleadmin.MappingActivity">
+    <item android:id="@+id/action_position_xml" android:title= "@string/action_position_xml"
+        android:orderInCategory="100" />
+    <item android:id="@+id/action_content_xml" android:title= "@string/action_content_xml"
+        android:orderInCategory="100" />
+</menu>
+<!-- From: file:/home/micha/dev/projects/android-uri-beacon-scanner/app/src/main/res/menu/menu_mapping.xml -->
