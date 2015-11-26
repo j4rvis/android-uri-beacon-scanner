@@ -25,6 +25,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+
 
 public class XmlActivity extends Activity {
 
@@ -36,14 +38,16 @@ public class XmlActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_xml);
+        setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
 
         Intent intent = getIntent();
         String xml = intent.getStringExtra("xml");
+        setTitle(xml.toUpperCase());
 
         TextView xmlContent = (TextView) findViewById(R.id.xml_content);
         tv = (TextView) findViewById(R.id.upload_status);
         file = new File(Environment.getExternalStorageDirectory(), xml);
-        Log.d("TAG",file.toString());
+//        Log.d("TAG",file.toString());
         FileInputStream fis = null;
 
         try {
@@ -72,7 +76,6 @@ public class XmlActivity extends Activity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
 
         Button uploadXML = (Button) findViewById(R.id.button_upload_xml);

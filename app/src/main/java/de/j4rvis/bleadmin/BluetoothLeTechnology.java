@@ -9,19 +9,16 @@ import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
-import android.os.Handler;
 import android.util.Log;
-import android.widget.Adapter;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import de.hadizadeh.positioning.controller.Technology;
 import de.hadizadeh.positioning.model.SignalInformation;
@@ -37,42 +34,32 @@ public class BluetoothLeTechnology extends Technology {
     private List<ScanFilter> filters;
     private Map<String, SignalInformation> signalData;
 
-    private UriBeaconAdapter adapter = null;
-    private TextView textView = null;
-
-    private int cacheSize = 10;
     private LinkedList<UriBeacon> btLeDevices;
     private boolean isScanning = false;
 
-    private ScanCallback leScanCallback = null;
-
-    private ScanCallback leScanCallbackAdapter = new ScanCallback() {
-        @Override
-        public void onScanResult(int callbackType, ScanResult result) {
-            super.onScanResult(callbackType, result);
-            UriBeacon beacon = new UriBeacon(result);
-
-            if(adapter!=null){
-                Log.d(TAG, "Adapter");
-                adapter.add(beacon);
-            }
+    Comparator<UriBeacon> beaconComparator = new Comparator<UriBeacon>() {
+        public int compare(UriBeacon obj1,UriBeacon obj2) {
+            return obj1.compareTo(obj2);
         }
     };
-    private ScanCallback leScanCallbackMapping = new ScanCallback() {
+
+    private ScanCallback leScanCallback = new ScanCallback() {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
             super.onScanResult(callbackType, result);
             UriBeacon beacon = new UriBeacon(result);
-            if (textView!=null){
-                if (beacon.getRssi() > -85) {
-                    textView.setText(beacon.getUri());
-//                    Log.d(TAG, beacon.toString());
-                    btLeDevices.add(beacon);
-                }
-                while (btLeDevices.size() > cacheSize) {
-                    btLeDevices.removeFirst();
-                }
+
+            if (!beacon.isUriBeacon()){ return; }
+            if(btLeDevices.isEmpty()){
+                btLeDevices.add(beacon);
+            } else if(!btLeDevices.contains(beacon)){
+                btLeDevices.add(beacon);
+            } else {
+                int position = btLeDevices.indexOf(beacon);
+                btLeDevices.get(position).addRssiValue(result.getRssi());
+//                btLeDevices.set(position, beacon);
             }
+            Collections.sort(btLeDevices,beaconComparator);
         }
     };
 
@@ -89,43 +76,37 @@ public class BluetoothLeTechnology extends Technology {
         return mInstance;
     }
 
-    public void activateCallback(int value){
-        switch (value){
-            case 0:
-                leScanCallback = leScanCallbackAdapter;
-                break;
-            case 1:
-                leScanCallback = leScanCallbackMapping;
-                break;
-            default:
-                leScanCallback = leScanCallbackAdapter;
-                break;
-        }
+    public BluetoothAdapter getBluetoothAdapter() {
+        return bluetoothAdapter;
+    }
+
+    public LinkedList<UriBeacon> getBtLeDevices() {
+        return btLeDevices;
+    }
+
+    public UriBeacon getFirstBtLeDevice() {
+        return btLeDevices.getLast();
+    }
+
+    public int getDeviceCount() {
+        return btLeDevices.size();
     }
 
     @Override
     public Map<String, SignalInformation> getSignalData() {
         if (btLeDevices.size() > 0) {
             UriBeacon bestDevice = Collections.max(btLeDevices);
-            Log.d(TAG,bestDevice.toString());
+//            Log.d(TAG,bestDevice.toString());
             signalData.clear();
-            signalData.put(bestDevice.getUri(), new SignalInformation(1.0));
+            signalData.put(bestDevice.getAddress(), new SignalInformation(1.0));
             return signalData;
         }
         return null;
     }
 
-    public void setAdapter(UriBeaconAdapter adapter){
-        this.adapter = adapter;
-    }
-
-    public void setTextView(TextView textView) {
-        this.textView = textView;
-    }
-
     private void initTechnology(){
         Log.d(TAG, "INIT");
-        providesExactlyPosition();
+//        providesExactlyPosition();
         btLeDevices = new LinkedList<>();
         signalData = new HashMap<>();
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -140,6 +121,7 @@ public class BluetoothLeTechnology extends Technology {
         if(!isScanning){
             super.startScanning();
             Log.d(TAG, "start scanning...");
+            scanner = bluetoothAdapter.getBluetoothLeScanner();
             scanner.startScan(filters, settings, leScanCallback);
             isScanning = true;
         }
@@ -149,6 +131,7 @@ public class BluetoothLeTechnology extends Technology {
     public void stopScanning() {
         if(isScanning){
             super.stopScanning();
+            scanner = bluetoothAdapter.getBluetoothLeScanner();
             scanner.stopScan(leScanCallback);
             isScanning = false;
         }

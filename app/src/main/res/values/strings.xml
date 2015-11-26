@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BLEAdmin</string>
+    <string name="app_name">BLEAdminExt</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_position_xml">Positions XML</string>
@@ -12,4 +12,6 @@
     <string name="title_activity_mapping">MappingActivity</string>
     <string name="title_activity_web_view">WebViewActivity</string>
     <string name="title_activity_xml">XmlActivity</string>
+    <string name="title_activity_graph">GraphActivity</string>
+    <string name="title_activity_graph_list">GraphListActivity</string>
 </resources>

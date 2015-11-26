@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/BLEAdmin.iml" filepath="$PROJECT_DIR$/BLEAdmin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android-uri-beacon-scanner.iml" filepath="$PROJECT_DIR$/android-uri-beacon-scanner.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

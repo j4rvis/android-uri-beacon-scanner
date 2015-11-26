@@ -12,32 +12,38 @@
         android:id="@+id/listView"
         android:layout_weight="1" />
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <Button
+        android:id="@+id/button"
+        android:text="Zeige Graphen"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/action_container">
+        android:layout_height="wrap_content" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Start"
-            android:id="@+id/button_start"
-            android:layout_gravity="left" />
+    <!--<LinearLayout-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:id="@+id/action_container">-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:id="@+id/scan_status"
-            android:layout_weight="1"
-            android:gravity="center_vertical|center_horizontal" />
+        <!--<Button-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Start"-->
+            <!--android:id="@+id/button_start"-->
+            <!--android:layout_gravity="left" />-->
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Stop"
-            android:id="@+id/button_stop"
-            android:layout_gravity="right" />
-    </LinearLayout>
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="fill_parent"-->
+            <!--android:id="@+id/scan_status"-->
+            <!--android:layout_weight="1"-->
+            <!--android:gravity="center_vertical|center_horizontal" />-->
+
+        <!--<Button-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Stop"-->
+            <!--android:id="@+id/button_stop"-->
+            <!--android:layout_gravity="right" />-->
+    <!--</LinearLayout>-->
 </LinearLayout>

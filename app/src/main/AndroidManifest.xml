@@ -37,10 +37,10 @@
         <activity
             android:name=".WebViewActivity"
             android:label="@string/title_activity_web_view"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".GraphActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.j4rvis.bleadmin.MainActivity" />
+                android:value="de.j4rvis.bleadmin.GraphActivity" />
         </activity>
         <activity
             android:name=".XmlActivity"
@@ -49,6 +49,22 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.j4rvis.bleadmin.MappingActivity" />
+        </activity>
+        <activity
+            android:name=".GraphActivity"
+            android:label="@string/title_activity_graph"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.j4rvis.bleadmin.MainActivity" />
+        </activity>
+        <activity
+            android:name=".GraphListActivity"
+            android:label="@string/title_activity_graph_list"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.j4rvis.bleadmin.MainActivity" />
         </activity>
     </application>
 

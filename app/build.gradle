@@ -3,9 +3,8 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
-
     defaultConfig {
-        applicationId "de.j4rvis.bleadmin"
+        applicationId 'de.j4rvis.bleadminext'
         minSdkVersion 21
         targetSdkVersion 21
         versionCode 1
@@ -17,10 +16,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    productFlavors {
+    }
+}
+
+repositories {
+    maven { url "https://jitpack.io" }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile files('libs/indoor-positioning-1.0.jar')
     compile files('libs/indoor-positioning-content-1.0.jar')
+    compile 'com.github.PhilJay:MPAndroidChart:+'
 }

@@ -11,6 +11,8 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+
 
 public class WebViewActivity extends Activity {
 
@@ -20,6 +22,7 @@ public class WebViewActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_view);
+        setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
 
         Intent intent = getIntent();
         String uri = intent.getStringExtra("Uri");

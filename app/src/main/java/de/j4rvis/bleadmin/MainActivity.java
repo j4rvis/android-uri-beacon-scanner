@@ -7,6 +7,7 @@ import android.bluetooth.le.ScanResult;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +17,11 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+
 
 public class MainActivity extends BluetoothActivity{
 
@@ -24,21 +30,18 @@ public class MainActivity extends BluetoothActivity{
     private UriBeaconAdapter adapter;
     private Context context = this;
     private TextView scanStatus;
-    private Context that = this;
     private BluetoothLeTechnology technology = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
 
         adapter = new UriBeaconAdapter(context);
         deviceList = (ListView) findViewById(R.id.listView);
         deviceList.setAdapter(adapter);
-        final Button startScanning = (Button) findViewById(R.id.button_start);
-        Button stopScanning = (Button) findViewById(R.id.button_stop);
-        this.scanStatus = (TextView) findViewById(R.id.scan_status);
-        Log.d(TAG,"INIT");
+        Button showGraphs = (Button) findViewById(R.id.button);
 
         deviceList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -46,55 +49,64 @@ public class MainActivity extends BluetoothActivity{
                 UriBeacon beacon = adapter.getItem(position);
                 String deviceUri = beacon.getUri();
                 Log.d(TAG, "URI: "+deviceUri);
-                Intent intent = new Intent(that, WebViewActivity.class);
-                intent.putExtra("Uri", deviceUri);
+                Intent intent = new Intent(context, GraphActivity.class);
+                intent.putExtra("Beacon", beacon);
                 startActivity(intent);
             }
         });
 
-        startScanning.setOnClickListener(new View.OnClickListener() {
+        showGraphs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isScanning)
-                    startScanning();
+                Intent intent = new Intent(context, GraphListActivity.class);
+                ArrayList beacons = new ArrayList<UriBeacon>();
+                beacons.addAll(technology.getBtLeDevices());
+                intent.putParcelableArrayListExtra("Beacons", beacons);
+                startActivity(intent);
             }
         });
 
-        stopScanning.setOnClickListener(new View.OnClickListener() {
+    }
+
+    public void scan(){
+        final Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
             @Override
-            public void onClick(View v) {
-                stopScanning();
+            public void run() {
+                if(isScanning){
+                    adapter.setList(technology.getBtLeDevices());
+                    handler.postDelayed(this, 1000);
+                } else
+                    return;
             }
-        });
+        };
+        handler.post(runnable);
     }
 
     public void startScanning(){
         Log.d(TAG, "Start Scanning...");
         isScanning = true;
-        scanStatus.setText("Scanning");
+        technology = BluetoothLeTechnology.getInstance();
         technology.startScanning();
+        scan();
     }
 
     private void stopScanning(){
         Log.d(TAG, "Stop Scanning...");
         isScanning = false;
-        scanStatus.setText("Stopped");
+        technology = BluetoothLeTechnology.getInstance();
         technology.stopScanning();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d(TAG, "onPause");
         stopScanning();
     }
 
     @Override
     protected void onBluetoothActivated() {
         super.onBluetoothActivated();
-        technology = BluetoothLeTechnology.getInstance();
-        technology.setAdapter(adapter);
-        technology.activateCallback(0);
         startScanning();
     }
 

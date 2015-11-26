@@ -10,6 +10,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -19,12 +20,12 @@ public class UriBeaconAdapter extends BaseAdapter{
 
     private static final String TAG = UriBeaconAdapter.class.getName();
 
-    private List<UriBeacon> beaconList = null;
+    private LinkedList<UriBeacon> beaconList = null;
     private Context context;
 
     public UriBeaconAdapter(Context context) {
         this.context = context;
-        this.beaconList = new ArrayList<>();
+        this.beaconList = new LinkedList<>();
     }
 
     @Override
@@ -48,19 +49,19 @@ public class UriBeaconAdapter extends BaseAdapter{
         }
     };
 
+    public void setList(LinkedList<UriBeacon> beacons) {
+        this.beaconList = beacons;
+        notifyDataSetChanged();
+    }
+
     public void add(UriBeacon beacon){
-        if (!beacon.isUriBeacon()){
-            return;
-        }
+        if (!beacon.isUriBeacon()){ return; }
 
         if(beaconList.isEmpty()){
-//            Log.d(TAG, "List is empty.");
             beaconList.add(beacon);
         } else if(!beaconList.contains(beacon)){
-//            Log.d(TAG, "Beacon is not yet in the list.");
             beaconList.add(beacon);
         } else {
-//            Log.d(TAG,"Beacon is already in the list."+" "+beacon.getUri());
             int position = beaconList.indexOf(beacon);
             beaconList.set(position, beacon);
         }

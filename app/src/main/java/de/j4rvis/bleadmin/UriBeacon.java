@@ -6,22 +6,28 @@ package de.j4rvis.bleadmin;
 import android.bluetooth.le.ScanRecord;
 import android.bluetooth.le.ScanResult;
 import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 import android.util.SparseArray;
 import android.webkit.URLUtil;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
-public class UriBeacon implements Comparable<UriBeacon> {
+public class UriBeacon implements Comparable<UriBeacon>, Parcelable {
 
     private final static String TAG = UriBeacon.class.getName();
 
     private String address;
     private String companyId;
     private String uri;
-    private int rssi;
-    private int txPower;
-    private long timeStamp;
+    Map<Long, Integer> rssiMap;
 
     private static final int DATA_TYPE_SERVICE_DATA = 0x16;
     private static final byte[] URI_SERVICE_16_BIT_UUID_BYTES = {(byte) 0xd8, (byte) 0xfe};
@@ -64,8 +70,7 @@ public class UriBeacon implements Comparable<UriBeacon> {
                 "address='" + address + '\'' +
                 ", companyId='" + companyId + '\'' +
                 ", uri='" + uri + '\'' +
-                ", rssi=" + rssi +
-                ", txPower=" + txPower +
+                ", rssi=" + getRssi() +
                 '}';
     }
 
@@ -77,54 +82,41 @@ public class UriBeacon implements Comparable<UriBeacon> {
         return address;
     }
 
-    public void setAddress(String mAddress) {
-        this.address = mAddress;
-    }
-
-    public String getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(String mCompanyId) {
-        this.companyId = mCompanyId;
-    }
-
     public String getUri() {
         return uri;
     }
 
-    public Uri getParsedUri(){
-        return Uri.parse(uri);
-    }
-
-    public void setUri(String mUri) {
-        this.uri = mUri;
+    public Map<Long, Integer> getRssiMap() {
+        return rssiMap;
     }
 
     public int getRssi() {
-        return rssi;
+        List<Map.Entry<Long,Integer>> entryList =
+                new ArrayList<>(rssiMap.entrySet());
+        return entryList.get(entryList.size()-1).getValue();
     }
 
-    public void setRssi(int mRssi) {
-        this.rssi = mRssi;
+    public void addRssiValue(int rssi) {
+        rssiMap.put(System.currentTimeMillis(), rssi);
+        Log.d(TAG, "Map size: " + rssiMap.size());
     }
 
-    public int getTxPower() {
-        return txPower;
-    }
-
-    public void setTxPower(int mTxPower) {
-        this.txPower = mTxPower;
+    public UriBeacon(Parcel parcel){
+        this.address = parcel.readString();
+        this.companyId = parcel.readString();
+        this.uri = parcel.readString();
+        this.rssiMap = parcel.readHashMap(ClassLoader.getSystemClassLoader());
+//        this.txPower = parcel.readInt();
     }
 
     public UriBeacon(ScanResult result){
         ScanRecord scanRecord = result.getScanRecord();
         byte[] scanRecordBytes = scanRecord.getBytes();
-        rssi = result.getRssi();
+        rssiMap = new TreeMap<>();
+        rssiMap.put(System.currentTimeMillis(), result.getRssi());
         address = result.getDevice().getAddress();
         companyId = String.format("%02x", scanRecordBytes[5])
                 + String.format("%02x", scanRecordBytes[6]);
-        timeStamp = result.getTimestampNanos();
         byte[] serviceData = parseServiceDataFromBytes(result.getScanRecord().getBytes());
         // Minimum UriBeacon consists of flags, TxPower
         if (serviceData != null && serviceData.length >= 2) {
@@ -199,9 +191,9 @@ public class UriBeacon implements Comparable<UriBeacon> {
 
     @Override
     public int compareTo(UriBeacon another) {
-        if(rssi > another.getRssi()) {
+        if(getRssi() > another.getRssi()) {
             return 1;
-        } else if(rssi < another.getRssi()) {
+        } else if(getRssi() < another.getRssi()) {
             return -1;
         }
         return 0;
@@ -219,4 +211,31 @@ public class UriBeacon implements Comparable<UriBeacon> {
     public int hashCode() {
         return address != null ? address.hashCode() : 0;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(address);
+        dest.writeString(companyId);
+        dest.writeString(uri);
+        dest.writeMap(rssiMap);
+    }
+
+    public static final Parcelable.Creator<UriBeacon> CREATOR =
+        new Parcelable.Creator<UriBeacon>(){
+
+            @Override
+            public UriBeacon createFromParcel(Parcel source) {
+                return new UriBeacon(source);
+            }
+
+            @Override
+            public UriBeacon[] newArray(int size) {
+                return new UriBeacon[size];
+            }
+        };
 }

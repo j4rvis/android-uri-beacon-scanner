@@ -18,6 +18,8 @@ import de.hadizadeh.positioning.model.SignalInformation;
 /**
  * Created by j4rvis on 21.07.15.
  */
+
+
 public class BluetoothActivity extends Activity{
 
     final String TAG = this.getClass().getName();
