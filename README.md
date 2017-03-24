@@ -1,5 +1,5 @@
 # android-uri-beacon-scanner
 
-The generated apk should be located at 'app/build/outputs/apk/app-debug.apk'
-Otherwise it would be necessary to run this project from Android Studio.
-The minSDK is 21.
+This project was part of my bachelor thesis. 
+The goal was to create an Application for testing indoor- and outdoor Locationing using URI-Beacons.
+Further it was necessary to test the accuracy of measured data provided by the beacons.
